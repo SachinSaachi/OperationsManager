@@ -1,0 +1,12 @@
+D:\Rajesh Code\My APP\OperationsManager\Common\bin\Debug\net7.0\Common.deps.json
+D:\Rajesh Code\My APP\OperationsManager\Common\bin\Debug\net7.0\Common.dll
+D:\Rajesh Code\My APP\OperationsManager\Common\bin\Debug\net7.0\Common.pdb
+D:\Rajesh Code\My APP\OperationsManager\Common\obj\Debug\net7.0\Common.csproj.AssemblyReference.cache
+D:\Rajesh Code\My APP\OperationsManager\Common\obj\Debug\net7.0\Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\Rajesh Code\My APP\OperationsManager\Common\obj\Debug\net7.0\Common.AssemblyInfoInputs.cache
+D:\Rajesh Code\My APP\OperationsManager\Common\obj\Debug\net7.0\Common.AssemblyInfo.cs
+D:\Rajesh Code\My APP\OperationsManager\Common\obj\Debug\net7.0\Common.csproj.CoreCompileInputs.cache
+D:\Rajesh Code\My APP\OperationsManager\Common\obj\Debug\net7.0\Common.dll
+D:\Rajesh Code\My APP\OperationsManager\Common\obj\Debug\net7.0\refint\Common.dll
+D:\Rajesh Code\My APP\OperationsManager\Common\obj\Debug\net7.0\Common.pdb
+D:\Rajesh Code\My APP\OperationsManager\Common\obj\Debug\net7.0\ref\Common.dll

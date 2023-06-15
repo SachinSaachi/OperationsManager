@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "xf9YtWoAOfFizrkcQS8bx9syxnqDKV8cPqmisvFnrNqqrzfA47vHSt539cYDY7HhULlXUhBYLog2Af7uQMd0fg==",
+  "success": true,
+  "projectFilePath": "D:\\Rajesh Code\\My APP\\OperationsManager\\Common\\Common.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\d2h.rajeshkumar\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\7.0.0\\microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\d2h.rajeshkumar\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

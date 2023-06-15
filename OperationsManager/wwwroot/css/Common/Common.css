@@ -1,0 +1,66 @@
+﻿body {
+}
+.divMain {
+    border: 1px solid;
+    padding: 10px;
+    box-shadow: 5px 10px;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.blinkytext {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.2em;
+    font-style: oblique;
+    animation: blinker 1s linear infinite;
+}
+
+.grid-view {
+    padding: 0;
+    margin: 0;
+    border: 1px solid #333;
+    font-family: "Verdana, Arial, Helvetica, sans-serif, Trebuchet MS";
+    font-size: 0.9em;
+}
+
+    .grid-view tr.header {
+        color: white;
+        background-color: gray;
+        height: 25px;
+        vertical-align: middle;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .grid-view tr.normal {
+        color: black;
+        background-color: white;
+        height: 25px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .grid-view tr.alternate {
+        color: black;
+        background-color: white;
+        height: 25px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+        .grid-view tr.normal:hover, .grid-view tr.alternate:hover {
+            background-color: gainsboro;
+            color: black;
+            font-weight: bold;
+        }
+
+
+.modalBackground {
+    background-color: Gray;
+    filter: alpha(opacity=80);
+    opacity: 0.8;
+    z-index: 10000;
+}
+
+select.form-control option {
+    color: black;
+}

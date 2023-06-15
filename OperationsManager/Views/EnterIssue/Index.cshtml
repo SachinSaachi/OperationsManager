@@ -1,0 +1,444 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+    <link href="~/css/common/common.css" rel="stylesheet" />
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script language="javascript" type="text/javascript">
+        var counter;
+        $(document).ready(function () {
+            $('.deparment').prop('checked', true);
+            if ($(".deparment").prop('checked') == true) {
+                $('#trBrand').show();
+                $('#trEmail').show();
+                $('#TrEmpCode').hide();
+                $('#txtEmpCode').text="";
+            }
+            $('#btnYes').click(function () {
+                $('#<%=bttnsave.ClientID %>').show();
+                $('#lblMsg').html('');
+                $('#myModal').modal('hide');
+            });
+            $('#btnNo').click(function () {
+                $('#<%=bttnsave.ClientID %>').hide();
+                $('#lblMsg').html('');
+                $('#myModal').modal('hide');
+            });
+            $('#btnOK').click(function () {
+                $('#<%=bttnsave.ClientID %>').show();
+                $('#lblMsg1').html('');
+                $('#myModalComplaint').modal('hide');
+            });
+            counter = 0;
+        });
+        function disablesave() {
+            //debugger;
+            if (!Page_ClientValidate()) {
+                counter = 0;
+                $('#<%=bttnsave.ClientID%>').removeAttr('disabled');
+            }
+            else {
+                counter++;
+                if (counter > 0) {
+                    $('#<%=bttnsave.ClientID%>').attr('disabled', true);
+                }
+            }
+        }
+        function openModal(msg) {
+            $('#lblMsg').html(msg);
+            $('#myModal').modal({ backdrop: 'static', keyboard: true });
+        }
+
+        function openModalForComplaint(msg) {
+            $('#lblMsg1').html(msg);
+            $('#myModalComplaint').modal({ backdrop: 'static', keyboard: true });
+        }
+
+
+
+        //onkeypress='return keylock()'
+        function keylock() {
+            if ((event.keyCode >= 48 && event.keyCode <= 57))
+                return true;
+            else return false;
+        }
+
+        function ClearData() {
+            var fil = document.getElementById('<%=FlUpload.ClientID %>')
+            fil.select();
+            n = fil.createTextRange();
+            n.execCommand('delete');
+            fil.focus();
+            return false;
+        }
+
+        function validate(s, args) {
+            var item = document.getElementById('<%=ddlProblem.ClientID %>');
+            var value = item.options[item.selectedIndex].value;
+            if (value == "1345" || value == "380") {
+                args.IsValid = args.Value.trim() != '';
+            }
+            else {
+                args.IsValid = true;
+            }
+        }
+    </script>
+    <style>
+        input[type=radio] {
+            display: none;
+            margin: 10px;
+        }
+
+        .form-control{
+        -webkit-appearance:auto;
+        }
+            /*
+          Change the look'n'feel of labels (which are adjacent to radiobuttons).
+          Add some margin, padding to label
+        */
+            input[type=radio] + label {
+                display: inline-block;
+                margin: 0px;
+                padding: 4px 12px;
+                background-color: white;
+            }
+            /*
+         Change background color for label next to checked radio button
+         to make it look like highlighted button
+        */
+            input[type=radio]:checked + label {
+                background-image: none;
+                background-color: #fd7e14;
+            }
+
+        .radioButtonList input[type="radio"] {
+            width: auto;
+            float: left;
+        }
+
+        .radioButtonList label {
+            width: auto;
+            display: inline;
+            float: left;
+            font-size: 1.13rem;
+            color: black !important;
+            border: solid 0.5px grey;
+            /* border-radius: 2px;*/
+            /*font-style: italic;*/
+        }
+    </style>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data" asp-controller="EnterIssue" asp-action="Index">
+    <div class="divMain" style="width: 70%; text-align: center; background-color: #a5d7ad">
+        <table align="center" width="100%" style="border: 1px solid black; background-color: white;">
+            <tbody>
+                <tr>
+                    <td style="text-align: center" colspan="3">
+                            <label id="lblissuedetail"><b>Create a Ticket</b></label>
+                            <strong><span style="font-size: 8pt; color: #336600"></span></strong>
+                    </td>
+                </tr>
+                    <tr style="font-weight: bold; font-size: 8pt; color: #336600">
+                        <td style="width: 92px"></td>
+                        <td align="left">
+                            <br />
+                            * Marked fields are mandatory
+                        </td>
+                        <td style="width: 3px"></td>
+                    </tr>
+                    <tr style="font-weight: bold;" runat="server" id="trDept">
+                        <td style="width: 20%; text-align: right" valign="top">
+                            <span style="color: red">*</span>
+                            <span style="color: #000000">Select Department:&nbsp;</span>&nbsp;
+                        </td>
+                        <td style="text-align: left;">
+                            @foreach (var fruit in @ViewBag.deparmentMaster)
+                            {
+                                <input class="radioButtonList deparment" id="@fruit.DepartmentName" type="radio" name="deparment" value="@fruit.DepartmentName" />
+                                <label class="radioButtonList deparment" for="@fruit.DepartmentName">@fruit.DepartmentName</label>
+                                <br />
+                            }
+                        </td>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    
+                    <tr id="TrEmpCode">
+                        <td style="width: 20%; text-align: right" valign="top">
+                            <span style="color: red">*</span><strong>Employee Code:&nbsp;&nbsp;</strong>
+                        </td>
+                        <td style="text-align: left">
+                            <input type="text" id="txtEmpCode" name="EmpCode" class="form-control" inputmode="numeric" required>
+                        </td>
+                        <td style="width: 3px"></td>
+                    </tr>
+                    <tr style="font-weight: bold;" id="trBrand" class="trBrand">
+                        <td style="width: 20%; text-align: right" valign="top">
+                            <span style="color: red">*</span>
+                            <span style="color: #000000">Select Brand:&nbsp;</span>&nbsp;
+                        </td>
+                        <td style="text-align: left;">
+                            @foreach (var fruit in @ViewBag.CompanyMaster)
+                            {
+                                <input class="radioButtonList" id="@fruit.CompanyName" type="radio" name="Company" value="@fruit.CompanyName" />
+                                <label class="radioButtonList" for="@fruit.CompanyName">@fruit.CompanyName</label>
+                                
+                            }
+                        </td>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <td style="width: 20%; text-align: right" valign="top">
+                            <span style="color: red">*</span><span style="color: #000000">Select Location:&nbsp;</span>&nbsp;
+                        </td>
+                        <td style="text-align: left">
+                            <select  id="ddllocationlist" name="location" class="form-control" asp-items="@(new SelectList(ViewBag.Locationlist,"LocationID", "LocationName"))">
+                                <option value="">--Select--</option>
+                            </select>
+                        </td>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+
+                              <tr style="font-weight: bold;">
+                            <td style="width: 20%; text-align: right" valign="top">
+                                <span style="color: red">*</span><span style="color: #000000">Select Type:&nbsp;</span>&nbsp;
+                            </td>
+                            <td style="text-align: left">
+
+                            @foreach (var fruit in @ViewBag.TypeMasterlist)
+                            {
+                                <input class="radioButtonList" id="@fruit.TypeName" type="radio" name="Type" value="@fruit.TypeName" />
+                                <label class="radioButtonList" for="@fruit.TypeName">@fruit.TypeName</label>
+                            }
+                            </td>
+                            <td>&nbsp;
+                            </td>
+                        </tr>
+
+                    <tr>
+                        <td style="width: 20%; text-align: right" valign="top">
+                            <span style="color: red">*</span><strong>Category:&nbsp;&nbsp; </strong>
+                        </td>
+                        <td style="text-align: left">
+                            <select name="Category" id="ddlCategory"  class="form-control" asp-items="@(new SelectList(ViewBag.CategoryMasterList,"CategoryName", "CategoryId"))">
+                            </select>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style="width: 20%; text-align: right" valign="top">
+                            <span style="color: red">*</span><strong>Sub Category:&nbsp;&nbsp; </strong>
+                        </td>
+                        <td style="text-align: left">
+                            <select name="SubCategory" id="ddlSubCategory" class="form-control" asp-items="@(new SelectList(ViewBag.SubCategoryMasterList,"SubCategoryName", "SubCategoryId"))">
+                            </select>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style="width: 20%; text-align: right" valign="top">
+                            <span style="color: red">*</span><strong>Items:&nbsp;</strong>&nbsp;
+                        </td>
+                        <td style="text-align: left">
+                            <select name="products" id="ddlProblem"  class="form-control" asp-items="@(new SelectList(ViewBag.ProblemMasterList,"ProblemName", "ProblemID"))">
+                            </select>
+                        </td>
+                        <td style="width: 3px; text-align: left">
+                            &nbsp;
+                        </td>
+                    </tr>
+                       <tr runat="server" id="trDomainID">
+                            <td style="width: 20%; text-align: right" valign="top">
+                                <span style="color: red">*</span><strong>Domain/Mail ID:&nbsp;&nbsp;</strong>
+                            </td>
+                            <td style="text-align: left">
+                                                       <input type="text" id="txtDomainID" name="DomainID" class="form-control" required>
+                            </td>
+                            <td style="width: 3px"></td>
+                        </tr>
+                         <tr style="font-weight: bold; color: #336600">
+                            <td style="width: 20%; text-align: right" valign="top">
+                                <span style="color: red">*</span><span style="color: #000000">Description:&nbsp;</span>&nbsp;
+                            </td>
+                            <td style="text-align: left">
+                        <partial name="~/views/Shared/_CKEditor.cshtml" />
+                                
+
+                            </td>
+                            <td>&nbsp; 
+                            </td>
+                        </tr>
+                           <tr style="font-weight: bold; color: #336600" id="trEmail" class="trEmail">
+                            <td style="width: 20%; text-align: right" valign="top">
+                                <span style="color: #000000">Notify E-Mail:&nbsp;&nbsp;</span><br />
+                                <span style="color: red">&nbsp;&nbsp;";" Seperated&nbsp;&nbsp;</span>
+                            </td>
+                            <td style="text-align: left">
+                            <input type="text" id="txtCC" name="CC" class="form-control" required>
+                          </td>
+                            <td>&nbsp;
+                            </td>
+                        </tr>
+                    <tr id="trUserAffected" runat="server">
+                        <td style="width: 20%; text-align: right" valign="top">
+                            <strong>No of users Affected:&nbsp;&nbsp;</strong>
+                        </td>
+                        <td style="text-align: left">
+                            <input type="number" id="txtUserAffected" name="CC" class="form-control" required>
+                         
+                        </td>
+                        <td style="width: 3px; text-align: left"></td>
+                    </tr>
+                    <tr runat="server" id="trnetworkPoint" visible="false">
+                            <td></td>
+                            <td colspan="2" align="left">
+                                <b>Before opening the ticket,Please Check Below Points.
+									<br />
+                                </b>
+                                *Is the issue across entire floor
+								<br />
+                                *Is the router/switch/Mux are powered up (to be checked by local IT)<br />
+                                *Is the ping and trace dropping at Service provider and DIshTV network (to be checked by local IT)<br />
+                                *Have you uploaded the ping &trace report.<br />
+                                *Is there particular module in application which is down. (if yes please log case with different category).<br />
+                            </td>
+                        </tr>
+                    <tr id="tr_webslow" runat="server" visible="false">
+                        <td style="width: 20%; text-align: right" valign="top">
+                            <strong>Website Slow Info</strong>
+                        </td>
+                        <td align="left" width="70%">
+                            <table>
+                                <tr>
+                                    <td align="right">
+                                        Working Process*
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txt_workmodule" name="workmodule" class="form-control" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        No of Users Checked*
+                                    </td>
+                                    <td>
+                                     <input type="text" id="txt_users" name="users" class="form-control" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        Processing time before*
+                                    </td>
+                                    <td>
+                                        <input type="text" id="txt_timeBefor" name="timeBefor" class="form-control" required>   &nbsp;&nbsp;now&nbsp;  <input type="text" id="txt_timeAfter" name="timeBefor" class="form-control" required>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="display: none">
+                        <td style="width: 20%; text-align: right" valign="top">
+                            <strong>Email&nbsp;ID</strong>&nbsp;
+                        </td>
+                        <td style="text-align: left">
+                            <input type="text" id="txtemailid" name="txtemailid" class="form-control" required>
+                        </td>
+                        <td style="width: 3px"></td>
+                    </tr>
+                    <tr runat="server" visible="false">
+                        <td style="width: 20%; text-align: right" valign="top">
+                            <strong>*Why Issue is logged&nbsp; for IT</strong>
+                        </td>
+                        <td style="text-align: left">
+                            <asp:DropDownList ID="drp_reason" runat="server" Width="255px" TabIndex="12">
+                                <asp:ListItem Selected="True">---Select---</asp:ListItem>
+                                <asp:ListItem>Do not have any option/tool to resolve the issue</asp:ListItem>
+                                <asp:ListItem>Do not have permission/authority</asp:ListItem>
+                            </asp:DropDownList>
+                            <asp:RequiredFieldValidator ID="cv3" runat="server" ControlToValidate="drp_reason"
+                                                        ErrorMessage="RequiredFieldValidator" InitialValue="---Select---">Mandatory*</asp:RequiredFieldValidator>
+                        </td>
+                        <td style="width: 3px; text-align: left"></td>
+                    </tr>
+                      <tr>
+                                <td style="width: 20%; text-align: right" valign="top">
+                                    <strong>Attachments:&nbsp;</strong>
+                                    <br />
+                                <span style="color: red">Only .bmp, .gif, .png, .jpg, .jpeg, .doc, .xls, .pdf, .xlsx, .msg, .zip, .rar are allowed</span>
+                            </td>
+                            <td style="text-align: left">
+                                <input id="FlUpload" type="file" name="attachment" tabindex="15" runat="server" />
+                            <button type="submit" id="btnClear" class="form-control btn btn-primary submit px-3">Sign-In</button>
+
+                                <br />
+
+                            </td>
+                            <td style="width: 3px"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%; text-align: right" valign="top"></td>
+                            <td style="text-align: left">
+                                <strong><span style="font-size: 8pt; color: #336600">(Note:Please donot attach files
+                                    more than 1 MB in Size )</span> </strong>
+                            </td>
+
+                            <td style="width: 3px"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%; text-align: right" valign="top">
+                                <span style="color: red">*</span><strong>Mobile No</strong>
+                            </td>
+                            <td style="text-align: left">
+                            <input type="text" id="txtMobileNo" name="MobileNo" class="form-control" required>
+                            </td>
+                            <td style="width: 3px"></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3">
+                            <label ID="lblerror" runat="server" ForeColor="Red" Visible="false" Text=""></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 92px"></td>
+                            <td style="text-align: left">
+                                <input id="bttnsave" type="button" value="Submit" name="bttnsave"
+                                    style="color: white; font-weight: bold; border-radius: 5px; background-color: #F15922; width: 60px;"
+                                    />
+
+                                <asp:Button ID="bttncancel" OnClick="bttncancel_Click" runat="server" Font-Bold="True"
+                                    Style="color: white; font-weight: bold; border-radius: 5px; background-color: #F15922"
+                                    Text="Cancel" CausesValidation="False" Width="60px"></asp:Button>
+
+                                <input id="btnLogAndClose" type="button" value="Log And Close" name="btnLogAndClose" visible="false"
+                                    style="color: white; font-weight: bold; border-radius: 5px; background-color: #F15922; width: 100px;"
+                                    />
+                            </td>
+                            <td style="width: 3px"></td>
+                        </tr>
+                        <tr>
+
+                            <td>
+
+                                <label ID="lbltext" runat="server"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 92px"></td>
+                            <td align="right">
+                            <label ID="lblNote" runat="server" Text="Note -: You will experience higher response time as you have choosen Others."
+                                    Visible="false" Style="font-weight: bold; font-size: large; border-radius: 5px; width: 60px;">
+                                </label>
+                            </td>
+                            <td style="width: 3px"></td>
+                        </tr>
+            </tbody>
+        </table>
+    </div>
+    </form>
+</body>
+</html>
