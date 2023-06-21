@@ -1,0 +1,112 @@
+﻿@model Common.Models.BOIssue.IssueLog
+<html>
+<head>
+    <link href="~/css/common/main.css" rel="stylesheet" />
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/js/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/scripts/enterissue.js"></script>
+
+    </head>
+    <body>
+    
+    <div class="border-5 center">
+        <h4 class="textcenter">Create a Ticket</h4>
+        <form method="post" id="frmEntityIssue" enctype="multipart/form-data" asp-action="SvaeIssues"  >
+            <div class="form-row">
+    <div class="col-md-4 mb-1">
+                    <label for="ddlDepartmentlist">Department <span style="color: red">*</span></label>
+                    <select id="ddlDepartmentlist" name="DepartmentID"   class="form-select" asp-items="@(new SelectList(ViewBag.deparmentMaster,"DepartmentID", "DepartmentName"))" required>
+                    </select>
+    </div>
+                <div class="col-md-4 mb-1">
+                    <label for="ddllocationlist">Location <span style="color: red">*</span></label>
+                    <select id="ddllocationlist" name="Location_Id" onchange="ddllocationChange()" class="form-select" asp-items="@(new SelectList(ViewBag.Locationlist,"LocationID", "LocationName"))" required>
+                        <option value="">--Select Location--</option>
+                    </select>
+    </div>
+                <div class="col-md-4 mb-1">
+                    <label for="ddlCatogryTypeList">Category Type <span style="color: red">*</span></label>
+                    <select id="ddlCatogryTypeList" name="TypID" onchange="CategoryType()" class="form-select" asp-items="@(new SelectList(ViewBag.TypeMasterlist,"TypeID", "TypeName"))" required>
+                        <option value="">--Select Type--</option>
+                    </select>
+  </div>
+  </div>
+    <div class="form-row">
+    <div class="col-md-12 mb-1">
+                    </select>
+                     <label for="ddlCircleList" id="lblCircle">Circle <span style="color: red">*</span></label>
+                    <select id="ddlCircleList" name="CircleID" class="form-select" asp-items="@(new SelectList(ViewBag.Circlelist,"CircleID", "CircleName"))">
+                        <option value="">--Select Circle--</option>
+                    </select>
+                    <input class="form-control" id="txtlocation" placeholder="Enter Circle" type="text" name="Type" value="" />
+  </div>
+  </div>
+  <div class="form-row">
+                <div class="col-md-4 mb-1">
+                        <label for="Category">Category <span style="color: red">*</span></label>
+                    <select name="CategoryID" id="ddlCategory" onchange="GetSubCategory()" class="form-select" required>
+                         <option value="">--Select Category--</option>
+                        </select>
+                    </div>
+                <div class="col-md-4 mb-1">
+                    <label for="validationDefault04">Sub Category <span style="color: red">*</span></label>
+                    <select name="SubCategoryID" id="ddlSubCategory" class="form-select" onchange="GetProblem()" required>
+                                                <option value="">--Select Sub Category--</option>
+
+                        </select>
+                    </div>
+                <div class="col-md-4 mb-1">
+                    <label for="validationDefault05">Items <span style="color: red">*</span></label>
+                        <select name="ProblemID" id="ddlProblem" class="form-select" required>
+                                                                        <option value="">--Select Problem--</option>
+
+                        </select>
+                    </div>
+  </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-1">
+                    <label for="Category">Description <span style="color: red">*</span></label>
+                        <partial name="~/views/Shared/_CKEditor.cshtml" />
+                    @Html.ValidationMessageFor(model => model.problem_details_html, "", new { @class = "text-danger" })
+                    <label style="color:red;">@TempData["problem"] </label>
+                    </div>
+                    
+                </div>
+            <div class="form-row">
+                <div class="col-md-12 mb-1">
+                    <label for="Category">Notify E-Mail <span style="color: red">&nbsp;&nbsp;";" Seperated&nbsp;&nbsp;</span></label>
+                    <input type="text" id="txtCC" name="CC" class="form-control" required>
+
+                </div>
+               
+            </div>
+            <div class="form-row">
+                <div class="col-md-4 mb-1" id="dvAffected">
+                    <label for="Category">No of users Affected</label>
+                    <input type="usersaffected" id="txtUserAffected" name="CC" class="form-control">
+
+                </div>
+                <div class="col-md-4 mb-1">
+                    <label for="validationDefault04">Attachments</label>
+                    <input id="FlUpload" type="file" name="postedFile" style="font-size: large;" runat="server" />
+                    <button type="submit" id="btnClear" class="btn btn-info submit px-3">Clear</button>
+
+                </div>
+                <div class="col-md-4 mb-1">
+                   
+                    <label for="validationDefault05">Mobile No <span style="color: red">*</span></label>
+                    <input type="text" id="txtMobileNo" name="MobileNo" class="form-control" required>
+
+                </div>
+            </div>
+  <button class="btn btn-primary"  id="btnsubmit" type="submit">Submit</button>
+            <button class="btn btn-danger" type="button">Cancel</button>
+
+      <button class="btn btn-secondary" type="button">Log And Close</button>
+
+</form>
+</div>
+</body>
+    </html>

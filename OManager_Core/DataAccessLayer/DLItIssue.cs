@@ -22,9 +22,11 @@ namespace OManager_Core.DataAccessLayer
 		CompanyMasterList GetCompanyMasterList();
 		LocationMasterList GetLocationMasterList(int intDepartmentid);
 		TypeMasterList GetTypeMasterList(string userTypeID);
-		CategoryMasterList GetCategoryMasterList(int type, int UserTypeID, int companyid, int DepartID);
+		CategoryMasterList GetCategoryMasterList(int type, int? UserTypeID, int companyid, int DepartID);
 		SubCategoryMasterList GetSubCategoryMasterList(int CategoryId);
 		ProblemMasterList GetProblemMasterList(int CategoryId, int SubCategoryId);
+        CircleMasterList GetCircleMasterList();
+        IssueOut SubmitIssue(IssueLog oBOIssue);
 
     }
 	public class DLItIssue: IDLItIssue
@@ -406,7 +408,7 @@ namespace OManager_Core.DataAccessLayer
             catch (Exception)
             { throw; }
         }
-        public CategoryMasterList GetCategoryMasterList(int type, int UserTypeID, int companyid, int DepartID)
+        public CategoryMasterList GetCategoryMasterList(int type, int? UserTypeID, int companyid, int DepartID)
         {
             DataTableReader dr = null;
             CategoryMasterList oboCategoryMasterList = new CategoryMasterList();
@@ -488,6 +490,100 @@ namespace OManager_Core.DataAccessLayer
                 }
                 dr.Close();
                 return oboProblemMasterList;
+            }
+            catch (Exception)
+            { throw; }
+        }
+
+        public CircleMasterList GetCircleMasterList()
+        {
+            DataTableReader dr = null;
+           CircleMasterList oboCircleMasterList = new CircleMasterList();
+            CircleMaster oBOCircleMaster;
+            String SQL = String.Empty;
+            ParameterList paramList = new ParameterList();
+            try
+            {
+                SQL = "usp_ITissueLog_GetTMS_CircleMaster";
+                dr = _executequery.ExecuteReader(SQL);
+                while (dr.Read())
+                {
+                    oBOCircleMaster = new CircleMaster();
+                    oBOCircleMaster.CircleID = Convert.ToInt32(dr["CircleID"]);
+                    oBOCircleMaster.CircleName = Convert.ToString(dr["CircleName"]).Trim();
+                    oboCircleMasterList.Add(oBOCircleMaster);
+                }
+                dr.Close();
+                return oboCircleMasterList;
+            }
+            catch (Exception)
+            { throw; }
+        }
+
+        public IssueOut SubmitIssue(IssueLog oBOIssue)
+        {
+            DataTableReader dr = null;
+            IssueOut oboIssueOut = new IssueOut();
+
+            String SQL = String.Empty;
+            ParameterList paramList = new ParameterList();
+            try
+            {
+                SQL = "usp_ItIssueLog_SubmitIssue";
+                paramList.Add(new SQLParameter("@attachment", oBOIssue.attachment));
+                paramList.Add(new SQLParameter("@ComplaintTranID", oBOIssue.ComplaintTranID));
+                paramList.Add(new SQLParameter("@it_department", oBOIssue.it_department));
+                paramList.Add(new SQLParameter("@problem_details", oBOIssue.problem_details));
+                paramList.Add(new SQLParameter("@ReasonToLog", oBOIssue.ReasonToLog));
+                paramList.Add(new SQLParameter("@severity_id", oBOIssue.severity_id));
+                paramList.Add(new SQLParameter("@specific_id", oBOIssue.specific_id));
+                paramList.Add(new SQLParameter("@status_id", oBOIssue.status_id));
+                paramList.Add(new SQLParameter("@Sub_specific_id", oBOIssue.Sub_specific_id));
+                paramList.Add(new SQLParameter("@user_id", oBOIssue.user_id));
+                paramList.Add(new SQLParameter("@usersaffected", oBOIssue.usersaffected));
+                paramList.Add(new SQLParameter("@VCNo", oBOIssue.VCNo));
+                paramList.Add(new SQLParameter("@dept_type", oBOIssue.dept_type));
+                //CR : 10971 Start 
+                paramList.Add(new SQLParameter("@CompanyID", oBOIssue.CompanyID));
+                paramList.Add(new SQLParameter("@TypID", oBOIssue.TypID));
+                paramList.Add(new SQLParameter("@Location_Id", oBOIssue.Location_Id));
+                paramList.Add(new SQLParameter("@Location_Name", oBOIssue.Location_Name));
+                paramList.Add(new SQLParameter("@ChildComplaint_id", oBOIssue.ChildComplaint_id));
+
+                paramList.Add(new SQLParameter("@CategoryID", oBOIssue.CategoryID));
+                paramList.Add(new SQLParameter("@SubCategoryID", oBOIssue.SubCategoryID));
+                paramList.Add(new SQLParameter("@ProblemID", oBOIssue.ProblemID));
+                paramList.Add(new SQLParameter("@SLAID", oBOIssue.SLAID));
+                paramList.Add(new SQLParameter("@URLPath", oBOIssue.UrlPath));
+                paramList.Add(new SQLParameter("@ticketNo", oBOIssue.TicketID));
+                paramList.Add(new SQLParameter("@MobileNo", oBOIssue.MobileNo));
+                paramList.Add(new SQLParameter("@Emp_Code", oBOIssue.Emp_Code));
+                paramList.Add(new SQLParameter("@CC", oBOIssue.CC));//CR : 10971 End
+                paramList.Add(new SQLParameter("@EditRemarks", oBOIssue.EngineerRemarks));  // CR :15381
+                paramList.Add(new SQLParameter("@DeptId", oBOIssue.DepartmentID));  // CR :15908
+                paramList.Add(new SQLParameter("@DomainID", oBOIssue.DomainID));  // CR :17421 by Nazia
+                paramList.Add(new SQLParameter("@problem_details_html", oBOIssue.problem_details_html));  // OR :18251 by Nazia
+                paramList.Add(new SQLParameter("@IPAddress", oBOIssue.IPAddress));  // CR :44380
+                paramList.Add(new SQLParameter("@Latitude", oBOIssue.Latitude));  // CR :44380
+                paramList.Add(new SQLParameter("@Longitude", oBOIssue.Longitude));  // CR :44380
+
+                dr = _executequery.ExecuteReader(SQL, paramList);
+                while (dr.Read())
+                {
+                    oboIssueOut.actualTime = dr["actualTime"] == null ? string.Empty : Convert.ToString(dr["actualTime"]);
+                    oboIssueOut.complaint_id = dr["complaint_id"] == null ? string.Empty : Convert.ToString(dr["complaint_id"]);
+                    oboIssueOut.expected_date = dr["expected_date"] == null ? string.Empty : Convert.ToString(dr["expected_date"]);
+                    oboIssueOut.loggedin_time = dr["loggedin_time"] == null ? string.Empty : Convert.ToString(dr["loggedin_time"]);
+                    //  oboIssueOut.problem_details = dr["problem_details"] == null ? string.Empty : Convert.ToString(dr["problem_details"]);
+                    oboIssueOut.resolution = dr["resolution"] == null ? string.Empty : Convert.ToString(dr["resolution"]);
+                    oboIssueOut.response = dr["response"] == null ? string.Empty : Convert.ToString(dr["response"]);
+                    oboIssueOut.severity_description = dr["severity_description"] == null ? string.Empty : Convert.ToString(dr["severity_description"]);
+                    oboIssueOut.severity_ids = dr["severity_ids"] == null ? string.Empty : Convert.ToString(dr["severity_ids"]);
+                    oboIssueOut.specific_emailid = dr["specific_emailid"] == null ? string.Empty : Convert.ToString(dr["specific_emailid"]);
+                    oboIssueOut.specific_engineer = dr["specific_engineer"] == null ? string.Empty : Convert.ToString(dr["specific_engineer"]);
+                }
+                dr.Close();
+                return oboIssueOut;
             }
             catch (Exception)
             { throw; }

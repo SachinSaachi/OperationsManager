@@ -6,12 +6,13 @@
     <link href="~/lib/ckeditor/contents.min.css" rel="stylesheet" />
 </head>
 <body>
-<textarea id="editor"></textarea>
+
+<textarea class="ckeditor text-editor" name="problem_details_html" id="editor" required></textarea>
 
 
     <script>
         CKEDITOR.replace('editor', {
-            height: 200
+            height: 150
         });
     </script>
 </body>

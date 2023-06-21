@@ -18,7 +18,7 @@ namespace Common.AppConfiguration
 			}
 			public  string ConnectionString()
 			{
-				var connectionString = _configuration["connectionStrings:ConnectionStringBaseProcess"].ToString();
+                var connectionString = _configuration["connectionStrings:ConnectionStringBaseProcess"].ToString();
 
 				//var MyConfig = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 				//var IntExample = MyConfig.GetValue<int>("AppSettings:SampleIntValue");

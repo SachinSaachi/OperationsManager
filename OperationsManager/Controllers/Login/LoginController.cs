@@ -1,33 +1,29 @@
-﻿using DocumentFormat.OpenXml.Office.CustomUI;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OManager_Core.businessLogic;
-using System.Diagnostics.Metrics;
 using System.Net.NetworkInformation;
-using System.Security.Cryptography;
 using static Common.Models.BOIssue;
 using static Common.Models.BOLogin;
 
 namespace OperationsManager.Controllers
 {
-	
+
 	public class LoginController : Controller
 	{
 		
 		private IBLItissue _bLItissue;
-		public LoginController(IBLItissue bLItissue)
+		private IHttpContextAccessor context;
+        private readonly IConfiguration _configuration;
+        public LoginController(IBLItissue bLItissue, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
 		{
 			_bLItissue= bLItissue;
-		}
+            context = httpContextAccessor;
+            _configuration = configuration;
+        }
 		UserDetail oBOUserDetail = new UserDetail();
 		LoginDetail oBOLoginDetail = new LoginDetail();
 		PendingUser objPendingUser = new PendingUser();	
-		//_bLItissue. oBOItIssue = new BLItIssue();
-		//ITIssue.BusinessRuleLayer.Common.BLMomUser oBOMOMItIssue = new ITIssue.BusinessRuleLayer.Common.BLMomUser();
-
-		//// CR :10971 
-		//ITIssue.BusinessObject.Common.UserTypeMaster oBOUserTypeMaster = new ITIssue.BusinessObject.Common.UserTypeMaster();
 		UserTypeMasterList oBOUserTypeMasterList = new UserTypeMasterList();
 		public void FillUserTypeMaster()
 		{
@@ -87,17 +83,23 @@ namespace OperationsManager.Controllers
 					
 					oBOUserTypeMasterList = ViewBag.UserTypeList;
 					UsertypeID = Convert.ToInt32(oBOUserTypeMasterList.Where(m => m.UserShortName == UserType).FirstOrDefault().UserTypeID);
-					HttpContext.Session.SetInt32("UsertypeID", UsertypeID);
-					// CR :10971
+                context.HttpContext?.Session.SetInt32("UsertypeID", UsertypeID);
+                // CR :10971
 					oBOLoginDetail.Type = UserType;
 					oBOLoginDetail.Username = UserName;
 					oBOLoginDetail.Password = Password;
 					oBOLoginDetail.Domain = "SITI"; //// CR :10971 
 					
 						oBOLoginDetail.CompanyId = 2;
-				HttpContext.Session.SetInt32("User_CompanyID", 2);//OR - 19012
-					
-					if (oBOLoginDetail.Type.Equals("MOMU") || oBOLoginDetail.Type.Equals("MOMA"))
+                context.HttpContext?.Session.SetInt32("User_CompanyID", 2);//OR - 19012
+                context.HttpContext?.Session.SetString("company", _configuration["company"].ToString());
+                context.HttpContext?.Session.SetInt32("fileSize",Convert.ToInt32( _configuration["UploadFileSize"]));
+
+
+                FillCompanyMaster();
+
+
+                    if (oBOLoginDetail.Type.Equals("MOMU") || oBOLoginDetail.Type.Equals("MOMA"))
 					{
 						oBOUserDetail = _bLItissue.GetUserDetailByLogin(oBOLoginDetail, UsertypeID);
 					}
@@ -105,60 +107,47 @@ namespace OperationsManager.Controllers
 					{
 						oBOUserDetail = _bLItissue.GetUserDetailByLogin(oBOLoginDetail, UsertypeID);
 					}
-				HttpContext.Session.SetString("UserType", oBOUserDetail.employee_type);
-				HttpContext.Session.SetInt32("user_id", oBOUserDetail.user_id);
-				HttpContext.Session.SetString("employee_name", oBOUserDetail.employee_name);
-				HttpContext.Session.SetString("employee_type", oBOUserDetail.employee_type);
-				HttpContext.Session.SetString("login_name", oBOUserDetail.login_name);
-				HttpContext.Session.SetString("department", oBOUserDetail.department);
-				HttpContext.Session.SetString("contact", oBOUserDetail.contact);
-				HttpContext.Session.SetString("extension", oBOUserDetail.extension);
-				HttpContext.Session.SetString("emailid", oBOUserDetail.email_id);
-				HttpContext.Session.SetInt32("centerid", oBOUserDetail.centerid);
-				HttpContext.Session.SetInt32("UserGroup", oBOUserDetail.UGID);
-				HttpContext.Session.SetString("IsAvailable", oBOUserDetail.IsAvailable);
-				HttpContext.Session.SetString("guiuniqueid",Guid.NewGuid().ToString().Trim());
-				HttpContext.Session.SetString("EmpCode", oBOUserDetail.Empcode);
-				
-					//CR-44380 To Capture IP address and Lat/Lng
-					//if (System.Configuration.ConfigurationManager.AppSettings["isCaptureLatLon"].ToString() == "1")
-					//{
-					//	if ((hdnlat.Value == "" || hdnlng.Value == "") && hdnLocationStatus.Value != "-100")
-					//	{
-					//		string scriptText = "javascript:alert('Please allow location tracking.');";
-					//		ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", scriptText, true);
-					//		return;
-					//	}
-					//}
-
-					////this.Session["Latitude"] = hdnlat.Value;
-				   //	this.Session["Longitude"] = hdnlng.Value;
-					//CR-44380 To Capture IP address and Lat/Lng
+                context.HttpContext?.Session.SetString("UserType", oBOUserDetail.employee_type);
+				context.HttpContext?.Session.SetInt32("user_id", oBOUserDetail.user_id);
+				context.HttpContext?.Session.SetString("employee_name", oBOUserDetail.employee_name);
+				context.HttpContext?.Session.SetString("employee_type", oBOUserDetail.employee_type);
+				context.HttpContext?.Session.SetString("login_name", oBOUserDetail.login_name);
+				context.HttpContext?.Session.SetString("department", oBOUserDetail.department);
+				context.HttpContext?.Session.SetString("contact", oBOUserDetail.contact);
+				context.HttpContext?.Session.SetString("extension", oBOUserDetail.extension);
+				context.HttpContext?.Session.SetString("emailid", oBOUserDetail.email_id);
+				context.HttpContext?.Session.SetInt32("centerid", oBOUserDetail.centerid);
+				context.HttpContext?.Session.SetInt32("UserGroup", oBOUserDetail.UGID);
+				context.HttpContext?.Session.SetString("IsAvailable", oBOUserDetail.IsAvailable);
+				context.HttpContext?.Session.SetString("guiuniqueid",Guid.NewGuid().ToString().Trim());
+				context.HttpContext?.Session.SetString("EmpCode", oBOUserDetail.Empcode);
 
 
-					if (HttpContext.Session.GetInt32("user_id") != null)
+
+
+                    if (context.HttpContext?.Session.GetInt32("user_id") != null)
 					{
-						if ((HttpContext.Session.GetString("UserType") != "MOMU" && HttpContext.Session.GetString("UserType") != "MOMA") & _bLItissue.CheckLoginStatus(HttpContext.Session.GetInt32("user_id")))
+						if ((context.HttpContext?.Session.GetString("UserType") != "MOMU" && context.HttpContext?.Session.GetString("UserType") != "MOMA") & _bLItissue.CheckLoginStatus(context.HttpContext?.Session.GetInt32("user_id")))
 						{
 						return RedirectToAction("Dashbord", "Login");
 					}
 						else
 						{
-							if (HttpContext.Session.GetInt32("user_id") != null)
+							if (context.HttpContext?.Session.GetInt32("user_id") != null)
 							{
-							if (_bLItissue.InsertLoginCheck(HttpContext.Session.GetInt32("user_id"), HttpContext.Session.GetString("guiuniqueid"), remote.ToString(), GetMACAddress()))
+							if (_bLItissue.InsertLoginCheck(context.HttpContext?.Session.GetInt32("user_id"), context.HttpContext?.Session.GetString("guiuniqueid"), remote.ToString(), GetMACAddress()))
 								{
-									if (HttpContext.Session.GetString("UserType") == "CCE" || HttpContext.Session.GetString("employee_type") == "UEMP")   // CR : 10971
+									if (context.HttpContext?.Session.GetString("UserType") == "CCE" || context.HttpContext?.Session.GetString("employee_type") == "UEMP")   // CR : 10971
 									{
 									return RedirectToAction("Dashbord", "Login");
 
 								}
-									else if (HttpContext.Session.GetString("UserType") == "ITTL")// add by shiv 21-06-2016
+									else if (context.HttpContext?.Session.GetString("UserType") == "ITTL")// add by shiv 21-06-2016
 									{
 									//Response.Redirect("RCA.aspx");
 									return RedirectToAction("Dashbord", "Login");
 								}
-									else if (HttpContext.Session.GetString("UserType") == "MOMU" || HttpContext.Session.GetString("UserType") == "MOMA")
+									else if (context.HttpContext?.Session.GetString("UserType") == "MOMU" || context.HttpContext?.Session.GetString("UserType") == "MOMA")
 									{
 										Response.Redirect("Pages/Mom/Index.aspx");
 									}
@@ -175,23 +164,38 @@ namespace OperationsManager.Controllers
 
 	
 		}
-		public ActionResult Dashbord()
+
+        public void FillCompanyMaster()
+        {
+            try
+            {
+                var companyMasters = _bLItissue.GetCompanyMasterList();
+                var CompanyID = companyMasters.FirstOrDefault(x => x.CompanyName == context.HttpContext?.Session.GetString("company")).CompanyID;
+                context.HttpContext?.Session.SetInt32("CompanyID", CompanyID);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public ActionResult Dashbord()
 		{
-			if ((HttpContext.Session.GetString("guiuniqueid") == null) || (HttpContext.Session.GetString("guiuniqueid").ToString() == ""))
+			if ((context.HttpContext?.Session.GetString("guiuniqueid") == null) || (context.HttpContext?.Session.GetString("guiuniqueid").ToString() == ""))
 			{
 				 return RedirectToAction("Index", "Login");
 			}
-			oBOLoginDetail = _bLItissue.GetLoginStatus(HttpContext.Session.GetInt32("user_id"), HttpContext.Session.GetString("guiuniqueid").ToString());
+			oBOLoginDetail = _bLItissue.GetLoginStatus(context.HttpContext?.Session.GetInt32("user_id"), context.HttpContext?.Session.GetString("guiuniqueid").ToString());
 			if ((oBOLoginDetail.name == "False"))
 			{
 				
 				return  RedirectToAction("Index", "Login");
 			}
 			
-			if (((HttpContext.Session.GetString("employee_type") != null || HttpContext.Session.GetInt32("user_id") != null || HttpContext.Session.GetInt32("login_name") != null)))
+			if (((context.HttpContext?.Session.GetString("employee_type") != null || context.HttpContext?.Session.GetInt32("user_id") != null || context.HttpContext?.Session.GetInt32("login_name") != null)))
 			{
 				
-					FillDashboard(HttpContext.Session.GetInt32("user_id"));
+					FillDashboard(context.HttpContext?.Session.GetInt32("user_id"));
 				
 				
 				////CR-45938 BOE Log Ticket

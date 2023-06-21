@@ -1418,6 +1418,58 @@
             }
         }
 
+        public class CircleMaster
+        {
+            public CircleMaster()
+            {
+                //
+                // TODO: Add constructor logic here
+                //
+            }
+            private int _Circle_ID;
+            private string _Circle_Name;
+            private int _CircleMap_ID;
+            public int CircleID
+            {
+                get
+                {
+                    return _Circle_ID;
+                }
+                set
+                {
+                    _Circle_ID = value;
+                }
+            }
+            public string CircleName
+            {
+                get
+                {
+                    return _Circle_Name;
+                }
+                set
+                {
+                    _Circle_Name = value;
+                }
+            }
+
+            public int CircleMapID
+            {
+                get
+                {
+                    return _CircleMap_ID;
+                }
+                set
+                {
+                    _CircleMap_ID = value;
+                }
+            }
+        }
+        public class CircleMasterList : List<CircleMaster>
+        {
+            public CircleMasterList()
+            {
+            }
+        }
 
     }
 

@@ -23,9 +23,11 @@ namespace OManager_Core.businessLogic
 		CompanyMasterList GetCompanyMasterList();
 		LocationMasterList GetLocationMasterList(int intDepartmentid);
 		TypeMasterList GetTypeMasterList(string userTypeID = "");
-		CategoryMasterList GetCategoryMasterList(int type, int UserTypeID, int companyid, int DepartID);
+		CategoryMasterList GetCategoryMasterList(int type, int? UserTypeID, int companyid, int DepartID);
 		SubCategoryMasterList GetSubCategoryMasterList(int CategoryId);
 		ProblemMasterList GetProblemMasterList(int CategoryId, int SubCategoryId);
+        CircleMasterList GetCircleMasterList();
+        IssueOut SubmitIssue(IssueLog oBOIssue);
     }
 	public class BLItIssue: IBLItissue
 	{
@@ -168,7 +170,7 @@ namespace OManager_Core.businessLogic
             }
         }
 
-        public CategoryMasterList GetCategoryMasterList(int type, int UserTypeID, int companyid, int DepartID)
+        public CategoryMasterList GetCategoryMasterList(int type, int? UserTypeID, int companyid, int DepartID)
         {
             try
             {
@@ -198,6 +200,31 @@ namespace OManager_Core.businessLogic
             try
             {
                 return _dLItIssue.GetProblemMasterList(CategoryId, SubCategoryId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public CircleMasterList GetCircleMasterList()
+        {
+            try
+            {
+                return _dLItIssue.GetCircleMasterList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public IssueOut SubmitIssue(IssueLog oBOIssue)
+        {
+            try
+            {
+                return _dLItIssue.SubmitIssue(oBOIssue);
             }
             catch (Exception)
             {
