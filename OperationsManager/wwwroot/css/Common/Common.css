@@ -1,6 +1,5 @@
 ﻿body {
 }
-
 .divMain {
     border: 1px solid;
     padding: 10px;
@@ -65,3 +64,92 @@
 select.form-control option {
     color: black;
 }
+/*
+----------- Added by Ravi Kumar--------*/
+.Dashboard {
+    width: 100%;
+    border: 1px solid;
+    border-radius: 3px;
+    padding: 20px;
+    color: black;
+    background: #d2f1fb;
+    font-size: 13px;
+}
+
+.dataTables_empty {
+    text-align: left !important;
+}
+
+.dataTables_filter {
+    float: unset !important;
+    width: 100% !important;
+}
+
+#tblIssueLog_wrapper [type=search] {
+    outline-offset: -2px;
+    width: 514px;
+    -webkit-appearance: none;
+}
+
+table.dataTable thead th, table.dataTable thead td {
+    padding: 0px 24px;
+    border-bottom: 1px solid #111;
+}
+
+.table thead th {
+    vertical-align: middle;
+}
+
+table#tblIssueLog thead tr th {
+    font-size: 12px;
+    position: sticky;
+    border: 1px solid #c4c4c4;
+    top: 0;
+    background: #e3e3e3;
+    width: 250px !important;
+    vertical-align: middle;
+}
+table#tblIssueLog tr td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+}
+td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/*thead th {
+    position: sticky;
+    z-index: 12;
+    top: 0;
+    background: #e3e3e3;
+    vertical-align: middle;
+}*/
+table.dataTable thead th, table.dataTable thead td {
+    padding: 0px 5px !important;
+    border-bottom: 1px solid #111;
+}
+.form-control {
+    display: block;
+    height: 30px !important;
+    padding: 0.165rem 0.55rem !important;
+    font-size: 14px !important;
+    font-weight: 400;
+}
+
+.center {
+    margin: auto;
+    border: 1px solid;
+    padding: 10px;
+    box-shadow: 5px 10px;
+    border-radius: 5px 5px 5px 5px;
+    border-block-color: #598989;
+    width: 95%;
+}
+
+table.Setborder tr td {
+    border: 1px solid;
+    border-radius: 6px;
+    padding: 5px;
+}
+

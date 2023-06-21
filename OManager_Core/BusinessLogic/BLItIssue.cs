@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Common.Models.BOIssue;
 using static Common.Models.BOLogin;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OManager_Core.businessLogic
 {
@@ -18,16 +19,20 @@ namespace OManager_Core.businessLogic
 		bool CheckLoginStatus(int? userrid);
 		bool InsertLoginCheck(int? userrid, string guiuniqueid, string LoginIP, string MacId);
 		LoginDetail GetLoginStatus(int? Userid, string GUIIniqueid);
-		PendingUser GetDashboardDetails(int? UserId);
-		DepartmentMasterList GetDepartmentMasterList(string userTypeID = "");
+        PendingUser GetDashboardDetails(int? UserId);
+        DepartmentMasterList GetDepartmentMasterList(string userTypeID = "");
 		CompanyMasterList GetCompanyMasterList();
 		LocationMasterList GetLocationMasterList(int intDepartmentid);
 		TypeMasterList GetTypeMasterList(string userTypeID = "");
-		CategoryMasterList GetCategoryMasterList(int type, int? UserTypeID, int companyid, int DepartID);
+		CategoryMasterList GetCategoryMasterList(int type, int UserTypeID, int companyid, int DepartID);
 		SubCategoryMasterList GetSubCategoryMasterList(int CategoryId);
 		ProblemMasterList GetProblemMasterList(int CategoryId, int SubCategoryId);
-        CircleMasterList GetCircleMasterList();
-        IssueOut SubmitIssue(IssueLog oBOIssue);
+        CommondataList GetStatusList();
+        List<GroupMaster> GetGroupListRoleWise(string Role, int UserID, string CompanyId);
+        PendingUserList GetLogSheet(string status_id,string employee_type, int CenterID, int loginid, string FromDate, string ToDate, string ticketID , string GroupID, int Group_CompanyID);
+      
+
+
     }
 	public class BLItIssue: IBLItissue
 	{
@@ -37,7 +42,8 @@ namespace OManager_Core.businessLogic
 			_dLItIssue = dLItIssue;
 		}
 
-		public UserTypeMasterList GetUserTypeMasterList()
+       
+        public UserTypeMasterList GetUserTypeMasterList()
 		{
 			try
 			{
@@ -76,8 +82,19 @@ namespace OManager_Core.businessLogic
 				throw;
 			}
 		}
+        public PendingUser GetDashboardDetails(int? UserId)
+        {
+            try
+            {
+                return _dLItIssue.GetDashboardDetails(UserId);
+            }
+            catch (Exception)
+            {
 
-		public bool InsertLoginCheck(int? userrid, string guiuniqueid, string LoginIP, string MacId)
+                throw;
+            }
+        }
+        public bool InsertLoginCheck(int? userrid, string guiuniqueid, string LoginIP, string MacId)
 		{
 			try
 			{
@@ -104,19 +121,7 @@ namespace OManager_Core.businessLogic
 		}
 
 
-		public PendingUser GetDashboardDetails(int? UserId)
-		{
-			try
-			{
-				return _dLItIssue.GetDashboardDetails(UserId);
-			}
-			catch (Exception)
-			{
-
-				throw;
-			}
-		}
-
+		
         public DepartmentMasterList GetDepartmentMasterList(string userTypeID = "")
         {
             try
@@ -170,7 +175,7 @@ namespace OManager_Core.businessLogic
             }
         }
 
-        public CategoryMasterList GetCategoryMasterList(int type, int? UserTypeID, int companyid, int DepartID)
+        public CategoryMasterList GetCategoryMasterList(int type, int UserTypeID, int companyid, int DepartID)
         {
             try
             {
@@ -207,11 +212,12 @@ namespace OManager_Core.businessLogic
                 throw;
             }
         }
-        public CircleMasterList GetCircleMasterList()
+
+        public CommondataList GetStatusList()
         {
             try
             {
-                return _dLItIssue.GetCircleMasterList();
+                return _dLItIssue.GetStatusList();
             }
             catch (Exception)
             {
@@ -220,15 +226,27 @@ namespace OManager_Core.businessLogic
             }
         }
 
-        public IssueOut SubmitIssue(IssueLog oBOIssue)
+        public List<GroupMaster> GetGroupListRoleWise(string Role, int UserID, string CompanyId)
         {
             try
             {
-                return _dLItIssue.SubmitIssue(oBOIssue);
+                return _dLItIssue.GetGroupListRoleWise(Role,UserID, CompanyId);
             }
             catch (Exception)
             {
 
+                throw;
+            }
+        }
+
+        public PendingUserList GetLogSheet(string status_id, string employee_type, int CenterID, int loginid, string FromDate, string ToDate, string ticketID, string GroupID, int Group_CompanyID)
+        {
+            try
+            {
+                return _dLItIssue.GetLogSheet(status_id, employee_type, CenterID, loginid, FromDate, ToDate, ticketID, GroupID, Group_CompanyID);
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }
